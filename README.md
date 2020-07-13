@@ -21,6 +21,10 @@ The goal is to automatically learn an efficient data augmentation regime for ima
 
 <b>How it works:</b>
 
+
+![figure](docs/model_new.png)
+
+
 <b>Results:</b>
 
 <b>Why it matters:</b> Proper data augmentation can significantly improve generalization performance. Unfortunately, deriving these augmentations require domain expertise or extensive hyper-parameter search. Thus, having an automatic and quick way of identifying efficient data augmentation has a big impact in obtaining better models.
