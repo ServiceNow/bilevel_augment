@@ -1,0 +1,2 @@
+git+git://github.com/ElementAI/haven.git@master#egg=haven
+torchmeta>0.0

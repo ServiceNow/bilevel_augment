@@ -1,47 +1,92 @@
-# bilvlda
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-### TODO
+![figure](docs/imagenet_collage.png)
 
-- Fix outer loop
-- Reproduce results for CIFAR10 with 95% test accuracy
-
-
-
-### EXPERIMENTS
-
-|  Status | Command | Score  | Description | 
-| --- | --- | --- | --- |
-| debug | `python trainval.py -e cifar_saypra -sb <savedir_base> -r 1` | TBA (epoch 100) | Train small-affine and Clf on Cifar10|
-
-### Timeline
-
-- Week 1: setup baselines on cifar and mnist
+# Data Augmentation with Bilevel Optimization [[Paper]](https://arxiv.org/pdf/2006.14699.pdf)
+The goal is to automatically learn an efficient data augmentation regime for image
+classification.
 
 
 
-##  Configurations
+## Table of Contents
 
-The following should give 94.5% accuracy in CIFAR10
-```python
-{
-            "name": "saypra",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/trainval.py",
-            "console": "integratedTerminal",
-            "args":[
-                "-e", "cifar_saypra",
-                "-sb", "/mnt/datasets/public/issam/prototypes/bilvada/non_borgy/",
-                "-r", "1"
-        ],
-        },
+- [Overview](#usage)
+- [Experiments](#experiments)
+- [Citation](#citation)
+
+## Overview
+
+<b>What's new:</b>
+
+
+
+Image 3 here
+
+## Why it matters
+
+Image 4 here
+
+## Experiments
+
+### Install requirements
+`pip install -r requirements.txt` 
+This command installs the Haven library which helps in managing the experiments.
+
+### 2.1 MNIST
+`python trainval.py -e mnist -sb ../results -d ../data -r 1`
+
+where `-e` is the experiment group, `-sb` is the result directory, and `-d` is the dataset directory.
+
+#### 2.2 Cifar100 experiment
+
+`python trainval.py -e cifar100 -sb ../results -d ../data -r 1`
+
+### 3. Results
+#### 3.1 Launch Jupyter by running the following on terminal,
+
+```
+jupyter nbextension enable --py widgetsnbextension --sys-prefix
+jupyter notebook
 ```
 
-Bilevel optimization for data augmentation
+#### 3.2 On a Jupyter cell, run the following script,
+```python
+from haven import haven_jupyter as hj
+from haven import haven_results as hr
+from haven import haven_utils as hu
 
-Todo:
-MixTrainVal \\
-BACH dataset \\
-Check if everything needed in case of restart is saved correctly (seed, train/val indexes) \\
-Save reference images \\
-Vizualisation
+# path to where the experiments got saved
+savedir_base = '../results'
+
+# filter exps
+filterby_list = [{'dataset':'cifar100', 'opt':{'c':0.5}}, 
+                 {'dataset':'cifar100', 'opt':{'name':'adam'}}]
+                 
+# get experiments
+rm = hr.ResultManager(savedir_base=savedir_base, 
+                      filterby_list=filterby_list, 
+                      verbose=0)
+                      
+# dashboard variables
+legend_list = ['opt.name']
+title_list = ['dataset', 'model']
+y_metrics = ['train_loss', 'val_acc']
+
+# launch dashboard
+hj.get_dashboard(rm, vars(), wide_display=True)
+```
+
+
+![alt text](neurips2019/cifar100.jpg)
+
+
+#### Citation
+
+```
+@article{mounsaveng2020learning,
+  title={Learning Data Augmentation with Online Bilevel Optimization for Image Classification},
+  author={Mounsaveng, Saypraseuth and Laradji, Issam and Ayed, Ismail Ben and Vazquez, David and Pedersoli, Marco},
+  journal={arXiv preprint arXiv:2006.14699},
+  year={2020}
+}
+```
