@@ -24,10 +24,10 @@ The goal is to automatically learn an efficient data augmentation regime for ima
 
 ![figure](docs/model_new.png)
 
-*.For each mini batch,a forward pass is made to calculate the training loss.
-*.Based on the training loss and the gradient of the training loss, an optimization step is made for the classifier in the inner loop.
-*.A forward pass is then made on the classifier with the new weight to calculate the validation loss.
-*.Thanks to the shared weights of the classifier used to obtain the training and validation loss, the gradient of the validation loss is backpropagated to the augmenter network to train it.
+* For each mini batch,a forward pass is made to calculate the training loss.
+* Based on the training loss and the gradient of the training loss, an optimization step is made for the classifier in the inner loop.
+* A forward pass is then made on the classifier with the new weight to calculate the validation loss.
+* Thanks to the shared weights of the classifier used to obtain the training and validation loss, the gradient of the validation loss is backpropagated to the augmenter network to train it.
 
 <b>Results:</b> Our model obtains better results than carefuly hand defined transformations and GAN-based approach and close results to methods using a policy search on CIFAR10, CIFAR100, BACH, Tiny-Imagenet and Imagenet datasets.
 
