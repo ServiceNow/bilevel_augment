@@ -248,7 +248,6 @@ if __name__ == '__main__':
                     savedir_base=args.savedir_base, 
                     
                     account_id='75ce4cee-6829-4274-80e1-77e89559ddfb',
-                    role_id='0b3991cb-4c6c-4765-8305-eb54e44b2020',
                     workdir=os.path.dirname(os.path.realpath(__file__)),
 
                     job_config={
