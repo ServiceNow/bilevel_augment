@@ -2,85 +2,77 @@
 
 ![figure](docs/imagenet_collage.png)
 
-# Data Augmentation with Bilevel Optimization [[Paper]](https://arxiv.org/pdf/2006.14699.pdf)
-The goal is to automatically learn an efficient data augmentation regime for image
-classification.
+# DABO: Data Augmentation with Bilevel Optimization  [[Paper]](https://arxiv.org/pdf/2006.14699.pdf)
+The goal is to automatically learn an efficient data augmentation regime for image classification.
 
 
 
 ## Table of Contents
 
-- [Overview](#usage)
+- [Overview](#overview)
 - [Experiments](#experiments)
 - [Citation](#citation)
 
 ## Overview
 
-<b>What's new:</b>
+<b>What's new:</b> DABO this method
 
+<b>Key insight:</b>
 
+<b>How it works:</b>
 
-Image 3 here
+<b>Results:</b>
 
-## Why it matters
+<b>Why it matters:</b> Proper data augmentation can significantly improve generalization performance. Unfortunately, deriving these augmentations require domain expertise or extensive hyper-parameter search. Thus, having an automatic and quick way of identifying
 
-Image 4 here
+<b>Where to go from here:</b>
+
 
 ## Experiments
 
-### Install requirements
-`pip install -r requirements.txt` 
-This command installs the Haven library which helps in managing the experiments.
-
-### 2.1 MNIST
-`python trainval.py -e mnist -sb ../results -d ../data -r 1`
-
-where `-e` is the experiment group, `-sb` is the result directory, and `-d` is the dataset directory.
-
-#### 2.2 Cifar100 experiment
-
-`python trainval.py -e cifar100 -sb ../results -d ../data -r 1`
-
-### 3. Results
-#### 3.1 Launch Jupyter by running the following on terminal,
+<b>1. Install requirements:</b> Run this command to install the Haven library which helps in managing experiments.
 
 ```
-jupyter nbextension enable --py widgetsnbextension --sys-prefix
+pip install -r requirements.txt
+``` 
+
+
+<b>2. CIFAR10 experiments:</b> The followng command runs the training and validation loop for CIFAR.
+
+```
+python trainval.py -e cifar -sb ../results -d ../data -r 1
+```
+
+where `-e` defines the experiment group, `-sb` is the result directory, and `-d` is the dataset directory.
+
+
+
+<b>3. Results:</b> Launch Jupyter by running the following on terminal,
+
+```
+jupyter nbextension enable --py widgetsnbextension
 jupyter notebook
 ```
 
-#### 3.2 On a Jupyter cell, run the following script,
+Then, run the following script on a Jupyter cell,
 ```python
 from haven import haven_jupyter as hj
 from haven import haven_results as hr
 from haven import haven_utils as hu
 
 # path to where the experiments got saved
-savedir_base = '../results'
+savedir_base = '<path_to_savedir_base>'
 
-# filter exps
-filterby_list = [{'dataset':'cifar100', 'opt':{'c':0.5}}, 
-                 {'dataset':'cifar100', 'opt':{'name':'adam'}}]
-                 
 # get experiments
-rm = hr.ResultManager(savedir_base=savedir_base, 
-                      filterby_list=filterby_list, 
-                      verbose=0)
-                      
-# dashboard variables
-legend_list = ['opt.name']
-title_list = ['dataset', 'model']
-y_metrics = ['train_loss', 'val_acc']
-
+rm = hr.ResultManager(exp_list=None, 
+                      savedir_base=savedir_base, 
+                      verbose=0
+                     )
 # launch dashboard
 hj.get_dashboard(rm, vars(), wide_display=True)
 ```
 
-
-![alt text](neurips2019/cifar100.jpg)
-
-
-#### Citation
+## Citation
 
 ```
 @article{mounsaveng2020learning,
