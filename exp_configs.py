@@ -14,7 +14,7 @@ EXP_GROUPS['cifar'] = hu.cartesian_exp_group({
         ],
         "valratio": [0.2],
         'model':
-        {'name':'blvl', 
+        [{'name':'blvl', 
                 'netC':{"name": "resnet18_meta", 
                         "RNDepth": 28,
                         "RNWidth": 10, "RNDO": 0.3,
@@ -23,7 +23,8 @@ EXP_GROUPS['cifar'] = hu.cartesian_exp_group({
                                 'lr':0.1,
                                  "weight_decay": 5e-4}},
 
-                'netA':{"name": 'small_affine', 
+                'netA':netA
+                } for netA in [None, {"name": 'small_affine', 
                                     "opt":{'name':'sgd', 
                                            'lr':0.2,
                                            'sched':False,
@@ -32,8 +33,7 @@ EXP_GROUPS['cifar'] = hu.cartesian_exp_group({
                                     "transform" : "affine", 
                                     
                                     "slope_annealing": True, 
-                                    "factor": 1}
-                },
+                                    "factor": 1}]],
         "n_inner_iter": [1],
         "batch": {"size": 128, "factor": 1},
         "niter": [201],

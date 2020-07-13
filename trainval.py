@@ -243,18 +243,30 @@ if __name__ == '__main__':
     if args.run_jobs:
         # launch jobs
         from haven import haven_jobs as hjb
-        job_config = {'volume': ['/mnt:/mnt'],
-                      'image': 'images.borgy.elementai.net/smounsav_pytorch_140:latest',
-                      'bid': '1',
-                      'restartable': '1',
-                      'gpu': args.ngpu,
-                      'mem': args.mem,
-                      'cpu': args.ncpu,
-                      # "gpu-model-filter": 'V100',
-                      "gpu-mem": args.gpumem,
-                      # 'cuda-version': '9.2'
-                      }
-        run_command = ("python trainval.py -ei <exp_id> -sb {savedir_base} "
+        
+        jm = hjb.JobManager(exp_list=exp_list, 
+                    savedir_base=args.savedir_base, 
+                    
+                    account_id='75ce4cee-6829-4274-80e1-77e89559ddfb',
+                    role_id='0b3991cb-4c6c-4765-8305-eb54e44b2020',
+                    workdir=os.path.dirname(os.path.realpath(__file__)),
+
+                    job_config={
+                                'image': 'registry.console.elementai.com/eai.issam/ssh',
+                                'data': ['c76999a2-05e7-4dcb-aef3-5da30b6c502c:/mnt/home',
+                                         '20552761-b5f3-4027-9811-d0f2f50a3e60:/mnt/results',
+                                         '9b4589c8-1b4d-4761-835b-474469b77153:/mnt/datasets'],
+                                'preemptable':True,
+                                'resources': {
+                                    'cpu': 4,
+                                    'mem': 8,
+                                    'gpu': 1
+                                },
+                                'interactive': False,
+                                },
+                    )
+
+        command = ("python trainval.py -ei <exp_id> -sb {savedir_base} -d {datadir_base} "
                        "--ngpu {ngpu} "
                        "{cuda_deterministic} "
                        "{pin_memory} "
@@ -262,14 +274,11 @@ if __name__ == '__main__':
                                                             ngpu=args.ngpu,
                                                             cuda_deterministic="--cuda_deterministic " if args.cuda_deterministic else "",
                                                             pin_memory="--pin_memory" if args.pin_memory else "",
-                                                            num_workers=args.num_workers))
-        print(run_command)
-        hjb.run_exp_list_jobs(exp_list,
-                              savedir_base=args.savedir_base,
-                              workdir=os.path.dirname(
-                                  os.path.realpath(__file__)),
-                              run_command=run_command,
-                              job_config=job_config)
+                                                            num_workers=args.num_workers,
+                                                            datadir_base=args.datadir_base))
+        print(command)
+        jm.launch_menu(command=command)
+        
 
     else:
         # run experiments

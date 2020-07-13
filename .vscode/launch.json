@@ -12,9 +12,24 @@
             "console": "integratedTerminal",
             "args":[
                 "-e", "cifar",
-                "-sb", "/mnt/home/results/bilevel_augment",
-                "-d","/mnt/home/datasets",
+                "-sb", "/mnt/results/debug/bilevel_augment",
+                "-d","/mnt/datasets",
                 "-r", "1"
+        ],
+        },
+
+        {
+            "name": "cifar_toolkit",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/trainval.py",
+            "console": "integratedTerminal",
+            "args":[
+                "-e", "cifar",
+                "-sb", "/mnt/results/toolkit/bilevel_augment",
+                "-d","/mnt/datasets",
+                "-j", "1",
+                "-r", "0"
         ],
         },
     ]

@@ -1,19 +1,16 @@
 from torch import nn
 from .optimizers import get_optimizer
 import torch 
-# from src import models
-# from src.utils import get_slope
+
 import itertools 
 import tqdm
 from haven import haven_utils as hu
 import os 
 import numpy as np
-# from src import utils as ut
+
 import torch.optim as optim
-from .base_netA import random_augmenter, stn, small_affine 
-from .base_netA import medium_affine, big_affine, affine_color, affine_color_mask
-from .base_netA import mask_fc, mask_cnn, color, color_mask, affine_color_mask_det
-from .base_netA import elastic
+from .base_netA import stn, small_affine 
+
 from torch.nn import functional as F
 from collections import OrderedDict
 from .base_netA.det_utils import get_slope

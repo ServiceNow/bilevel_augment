@@ -13,9 +13,7 @@ from src import utils as ut
 import torch.optim as optim
 
 
-from .base_netC import lenet, lenet_meta
-from .base_netC import resnet_meta, resnet_meta_old,resnet_cifar10_meta
-from .base_netC import wide_resnet, wide_resnet_meta
+from .base_netC import resnet_meta
 import torchvision.models as models
 
 from torchmeta.modules import MetaSequential, MetaLinear
@@ -34,57 +32,14 @@ class Classifier(nn.Module):
                 self.net.fc = nn.Linear(512, self.dataset.n_classes)
             else:
                 self.net = models.resnet18(num_classes= self.dataset.n_classes)
-        elif self.model_dict['name'] == 'resnet34':
-            if self.model_dict['pretrained']:
-                self.net = models.resnet34(pretrained=True)
-                self.net.fc = nn.Linear(512, self.dataset.n_classes)
-            else:
-                self.net = models.resnet34(num_classes= self.dataset.n_classes)                
-        elif self.model_dict['name'] == 'resnet50':
-            if self.model_dict['pretrained']:
-                self.net = models.resnet50(pretrained=True)
-                self.net.fc = nn.Linear(512, self.dataset.n_classes)
-            else:
-                self.net = models.resnet50(num_classes= self.dataset.n_classes)
-
-        elif self.model_dict['name'] == 'wide_resnet':
-            self.net = wide_resnet.WideResNet(nc=3, depth=self.model_dict['RNDepth'], num_classes=self.dataset.n_classes, widen_factor=self.model_dict['RNWidth'], dropRate=self.model_dict['RNDO'])
-        elif self.model_dict['name'] == 'lenet':
-            self.net =  lenet.LeNet(nc=3, ncat= self.dataset.n_classes)
-        elif self.model_dict['name'] == 'resnet20_cifar10_meta':
-            self.net = resnet_cifar10_meta.resnet20()
-        elif self.model_dict['name'] == 'resnet32_cifar10_meta':
-            self.net = resnet_cifar10_meta.resnet32(num_classes= self.dataset.n_classes)
-        elif self.model_dict['name'] == 'resnet56_cifar10_meta':
-            self.net = resnet_cifar10_meta.resnet56(num_classes= self.dataset.n_classes)            
+                
         elif self.model_dict['name'] == 'resnet18_meta':
             if self.model_dict.get('pretrained', True):
                 self.net = resnet_meta.resnet18(pretrained=True)
                 self.net.fc = MetaLinear(512, self.dataset.n_classes)
             else:
                 self.net = resnet_meta.resnet18(num_classes= self.dataset.n_classes)
-        elif self.model_dict['name'] == 'resnet18_meta_old':
-                self.net = resnet_meta_old.ResNet18(nc=3, nclasses= self.dataset.n_classes)
-        elif self.model_dict['name'] == 'resnet34_meta_old':
-                self.net = resnet_meta_old.ResNet34(nc=3, nclasses= self.dataset.n_classes)
-        elif self.model_dict['name'] == 'resnet34_meta':
-            if self.model_dict.get('pretrained', True):
-                self.net = resnet_meta.resnet34(pretrained=True)
-                self.net.fc = MetaLinear(512, self.dataset.n_classes)
-            else:
-                self.net = resnet_meta.resnet34(num_classes= self.dataset.n_classes)   
 
-        elif self.model_dict['name'] == 'resnet50_meta':
-            if self.model_dict.get('pretrained', True):
-                self.net = resnet_meta.resnet50(pretrained=True)
-                self.net.fc = MetaLinear(512 * 4, self.dataset.n_classes)
-            else:
-                self.net = resnet_meta.resnet50(num_classes= self.dataset.n_classes)                  
-        elif self.model_dict['name'] == 'wide_resnet_meta':
-            self.net = wide_resnet_meta.WideResNet(nc=3, depth=self.model_dict['RNDepth'], num_classes=self.dataset.n_classes, widen_factor=self.model_dict['RNWidth'], dropRate=self.model_dict['RNDO'])
-
-        elif self.model_dict['name'] == 'lenet_meta':
-            self.net =  lenet_meta.LeNet(nc=3, ncat= self.dataset.n_classes)
         else:
             raise ValueError('network %s does not exist' % model_dict['name'])
 
