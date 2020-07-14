@@ -143,7 +143,7 @@ class Blvl(nn.Module):
                 logits = self.netC.net(images)
                 # compute metrics (loss and classification)
                 clf_monitor.add(logits, labels)
-                pbar.set_description("Validating - Acc: %.3f - Acc5: %.3f" % (clf_monitor.get_avg_scores()['acc'], clf_monitor.get_avg_scores()['acc5']))
+                pbar.set_description("Validating - Acc: %.3f" % (clf_monitor.get_avg_scores()['acc']))
                 pbar.update(1)
                 del logits
                 del images
@@ -185,12 +185,9 @@ class ClfMonitor(object):
     def add(self, logits, labels):
         _, preds = torch.max(logits, 1)
         self.n_corr += (preds == labels).sum().item()
-        acc5 = accuracy(logits, labels, topk=(5,))
-        self.n_corr5 += acc5[0].item()        
         self.n_train += labels.size(0)
 
             
     def get_avg_scores(self):
         acc = self.n_corr / self.n_train
-        acc_5 = self.n_corr5 / self.n_train
-        return {'acc':100. * acc, 'acc5':100. * acc_5} 
+        return {'acc':100. * acc} 

@@ -155,8 +155,6 @@ def trainval(exp_dict, savedir_base, datadir_base, reset=False, num_workers=0, p
         score_dict = {}
         score_dict["epoch"] = epoch
         score_dict["test_acc"] = test_dict['acc']
-        score_dict["test_acc5"] = test_dict['acc5']
-        # score_dict["test_acc"] = val_dict['acc']
         score_dict["val_acc"] = val_dict['acc']
         score_dict["train_acc"] = train_dict_2['acc']
         score_dict["train_loss"] = train_dict['loss']
