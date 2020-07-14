@@ -9,15 +9,12 @@ EXP_GROUPS = {}
 EXP_GROUPS['cifar'] = hu.cartesian_exp_group({
         "dataset": [{'name': 'cifar10', 'transform_lvl':1.5, 'colorjitter': False, 'val_transform':'identity'}],
         "dataset_size": [ 
-        #     {'train':1000, 'test':1000},
                         {'train':None, 'test':None}
         ],
         "valratio": [0.2],
         'model':
         [{'name':'blvl', 
-                'netC':{"name": "resnet18_meta", 
-                        "RNDepth": 28,
-                        "RNWidth": 10, "RNDO": 0.3,
+                'netC':{"name": "resnet18_meta_2", 
                         "opt":{'name':'sgd', 'momentum':0.9,
                                 'sched':True, 
                                 'lr':0.1,
@@ -31,8 +28,6 @@ EXP_GROUPS['cifar'] = hu.cartesian_exp_group({
                                            'momentum':0.9,
                                            "weight_decay": 0.01}, 
                                     "transform" : "affine", 
-                                    
-                                    "slope_annealing": True, 
                                     "factor": 1}]],
         "n_inner_iter": [1],
         "batch": {"size": 128, "factor": 1},
@@ -58,22 +53,19 @@ EXP_GROUPS['bach'] = hu.cartesian_exp_group({
         "valratio": [0.2],
         'model': [{'name':'blvl', 
                 'netC':{"name": "resnet18_meta", 
-                        "RNDepth": 28,
-                        "RNWidth": 10, "RNDO": 0.3,
                         "opt":{'name':'sgd', 'momentum':0.9,
                                 'sched':True, 
                                 'lr':0.1,
                                  "weight_decay": 5e-4}},
 
                 'netA':netA
-                } for netA in [{"name": 'small_affine', 
+                } for netA in [None, {"name": 'small_affine', 
                                     "opt":{'name':'sgd', 
                                            'lr':0.2,
                                            'sched':False,
                                            'momentum':0.9,
                                            "weight_decay": 0.01}, 
                                     "transform" : "affine", 
-                                    "slope_annealing": True, 
                                     "factor": 1}]],
         "n_inner_iter": [1],
         "batch": {"size": 16, "factor": 1},

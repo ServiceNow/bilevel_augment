@@ -13,7 +13,7 @@ from src import utils as ut
 import torch.optim as optim
 
 
-from .base_netC import resnet_meta
+from .base_netC import resnet_meta, resnet_meta_2
 import torchvision.models as models
 
 from torchmeta.modules import MetaSequential, MetaLinear
@@ -39,6 +39,8 @@ class Classifier(nn.Module):
                 self.net.fc = MetaLinear(512, self.dataset.n_classes)
             else:
                 self.net = resnet_meta.resnet18(num_classes= self.dataset.n_classes)
+        elif self.model_dict['name'] == 'resnet18_meta_2':
+                self.net = resnet_meta_2.ResNet18(nc=3, nclasses= self.dataset.n_classes)                
 
         else:
             raise ValueError('network %s does not exist' % model_dict['name'])
