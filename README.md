@@ -53,6 +53,13 @@ python trainval.py -e cifar -sb ../results -d ../data -r 1
 
 where `-e` defines the experiment group, `-sb` is the result directory, and `-d` is the dataset directory.
 
+BACH experiments:</b> The followng command runs the training and validation loop on BACH dataset.
+
+```
+python trainval.py -e bach -sb ../results -d ../data -r 1
+```
+
+where `-e` defines the experiment group, `-sb` is the result directory, and `-d` is the dataset directory.
 
 
 <b>3. Results:</b> Launch Jupyter by running the following on terminal,
