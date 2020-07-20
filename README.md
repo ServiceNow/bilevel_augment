@@ -1,6 +1,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ![figure](docs/imagenet_collage.png)
+![figure](docs/bach_collage.png)
 
 # DABO: Data Augmentation with Bilevel Optimization  [[Paper]](https://arxiv.org/pdf/2006.14699.pdf)
 The goal is to automatically learn an efficient data augmentation regime for image classification.
@@ -45,7 +46,7 @@ pip install -r requirements.txt
 ``` 
 
 
-<b>2. CIFAR10 experiments:</b> The followng command runs the training and validation loop for CIFAR.
+<b>2.1 CIFAR10 experiments:</b> The followng command runs the training and validation loop for CIFAR.
 
 ```
 python trainval.py -e cifar -sb ../results -d ../data -r 1
@@ -53,6 +54,13 @@ python trainval.py -e cifar -sb ../results -d ../data -r 1
 
 where `-e` defines the experiment group, `-sb` is the result directory, and `-d` is the dataset directory.
 
+<b>2.2 BACH experiments:</b> The followng command runs the training and validation loop on BACH dataset.
+
+```
+python trainval.py -e bach -sb ../results -d ../data -r 1
+```
+
+where `-e` defines the experiment group, `-sb` is the result directory, and `-d` is the dataset directory.
 
 
 <b>3. Results:</b> Launch Jupyter by running the following on terminal,

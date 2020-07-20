@@ -46,15 +46,12 @@ EXP_GROUPS['cifar'] = hu.cartesian_exp_group({
 EXP_GROUPS['cifar_old'] = hu.cartesian_exp_group({
         "dataset": [{'name': 'cifar10', 'transform_lvl':1.5, 'colorjitter': False, 'val_transform':'identity'}],
         "dataset_size": [ 
-        #     {'train':1000, 'test':1000},
                         {'train':None, 'test':None}
         ],
         "valratio": [0.2],
         'model':
         [{'name':'blvl', 
-                'netC':{"name": "resnet18_meta", 
-                        "RNDepth": 28,
-                        "RNWidth": 10, "RNDO": 0.3,
+                'netC':{"name": "resnet18_meta_2", 
                         "opt":{'name':'sgd', 'momentum':0.9,
                                 'sched':True, 
                                 'lr':0.1,
@@ -68,12 +65,48 @@ EXP_GROUPS['cifar_old'] = hu.cartesian_exp_group({
                                            'momentum':0.9,
                                            "weight_decay": 0.01}, 
                                     "transform" : "affine", 
-                                    
-                                    "slope_annealing": True, 
                                     "factor": 1}]],
         "n_inner_iter": [1],
         "batch": {"size": 128, "factor": 1},
         "niter": [201],
+        "fixedSeed": [6442],
+        "predParams": [None],
+        "mixTrainVal": [True],
+        "testTimeDA": [0],
+        }) 
+
+EXP_GROUPS['bach'] = hu.cartesian_exp_group({
+        "dataset": 
+                {'name': 'bach',
+                'transform_lvl': 0,
+                'colorjitter': False,
+                'val_transform':'identity',
+                'folds_path':'/mnt/projects/bilvlda/dataset/ICIAR2018_BACH_Challenge/Iciar_folds',
+                'fold': 4,
+                'patch_size':'512'
+                },
+        "dataset_size": [ 
+                        {'train': None, 'test': None}],
+        "valratio": [0.2],
+        'model': [{'name':'blvl', 
+                'netC':{"name": "resnet18_meta", 
+                        "opt":{'name':'sgd', 'momentum':0.9,
+                                'sched':True, 
+                                'lr':0.1,
+                                 "weight_decay": 5e-4}},
+
+                'netA':netA
+                } for netA in [None, {"name": 'small_affine', 
+                                    "opt":{'name':'sgd', 
+                                           'lr':0.2,
+                                           'sched':False,
+                                           'momentum':0.9,
+                                           "weight_decay": 0.01}, 
+                                    "transform" : "affine", 
+                                    "factor": 1}]],
+        "n_inner_iter": [1],
+        "batch": {"size": 16, "factor": 1},
+        "niter": [40],
         "fixedSeed": [6442],
         "predParams": [None],
         "mixTrainVal": [True],

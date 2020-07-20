@@ -24,11 +24,8 @@ def get_slope(slope_annealing, epoch):
 
 def adjust_learning_rate_netC(optimizer, epoch, lr_init, model, dataset, return_lr=False):
 
-    if model in ['wide_resnet', 'wide_resnet_meta', 'resnet20_cifar10_meta', 'resnet32_cifar10_meta', 'resnet56_cifar10_meta', 'resnet18', 'resnet18_meta', 'resnet50_meta', 'resnet18_meta_old']:
-        if dataset in ['imagenet']:
-            """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-            lr = lr_init * (0.1 ** (epoch // 30))
-        elif dataset in ['bach']:
+    if model in ['resnet18_meta', 'resnet18_meta_2']:
+        if dataset in ['bach']:
             # eta_min = 0.0001
             # T_max = 20
             # lr = eta_min + (lr_init - eta_min) * (1 + math.cos(math.pi * epoch / T_max)) / 2
@@ -49,13 +46,6 @@ def adjust_learning_rate_netC(optimizer, epoch, lr_init, model, dataset, return_
                 lr = lr_init * 0.2 * 0.2
             else:
                 lr = lr_init * 0.2 * 0.2 * 0.2
-    else:
-        if epoch < 100:
-            lr = lr_init
-        elif epoch < 150:
-            lr = lr_init / 2
-        else:
-            lr = lr_init / 10    
     if return_lr:
             return lr
     else:

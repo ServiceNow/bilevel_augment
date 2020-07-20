@@ -7,7 +7,7 @@ from torch.utils.data import sampler
 
 import torchvision.transforms as transforms
 import numpy as np
-from . import cifar
+from . import cifar, bach
 from haven import haven_utils as hu
 from src.datasets.utils.patch_extractors import *
 
@@ -21,6 +21,15 @@ def get_dataset(datasetparams, split, exp_dict, datadir_base=None,
                         n_samples=n_samples,
                         colorjitter=colorjitter,
                         val_transform=val_transform)
+    elif datasetparams['name'] == 'bach':
+        return bach.Bach(split=split, transform_lvl=transform_lvl, 
+                                datadir_base=datadir_base,
+                                folds_path=datasetparams['folds_path'],
+                                fold=datasetparams['fold'],
+                                patch_size=512, 
+                                patch_extractor=NoOverlap,
+                                colorjitter=colorjitter,
+                                val_transform=val_transform)                        
     else:
         raise ValueError("dataset %s does not exist" % datasetparams['name'])
 
