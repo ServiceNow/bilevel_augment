@@ -204,7 +204,7 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--view_results', default=None)
     parser.add_argument('-j', '--run_jobs', default=None)
 
-    parser.add_argument('--ngpu', type=int, default=1,
+    parser.add_argument('-ng', '--ngpu', type=int, default=1,
                         help='number of GPUs to use')
     parser.add_argument('--gpumem', type=int, default=12,
                         help='amount of GPU RAM to use')
@@ -212,11 +212,11 @@ if __name__ == '__main__':
                         help='number of CPUs to use')
     parser.add_argument('--mem', type=int, default=16,
                         help='amount of RAM to use')
-    parser.add_argument('--num_workers', type=int,
+    parser.add_argument('-nw', '--num_workers', type=int,
                         help='number of data loading workers', default=0)
-    parser.add_argument('--cuda_deterministic', action='store_true',
+    parser.add_argument('-cd', '--cuda_deterministic', type=int, default=0,
                         help='activate cuda deterministic mode')
-    parser.add_argument('--pin_memory', action='store_true',
+    parser.add_argument('-pm', '--pin_memory', type=int, default=0,
                         help='use GPU pinned memory')
 
     args = parser.parse_args()
@@ -238,46 +238,7 @@ if __name__ == '__main__':
 
     # Run experiments
     # ----------------------------
-    if args.run_jobs:
-        # launch jobs
-        from haven import haven_jobs as hjb
-        
-        jm = hjb.JobManager(exp_list=exp_list, 
-                    savedir_base=args.savedir_base, 
-                    
-                    account_id='75ce4cee-6829-4274-80e1-77e89559ddfb',
-                    workdir=os.path.dirname(os.path.realpath(__file__)),
-
-                    job_config={
-                                'image': 'registry.console.elementai.com/eai.issam/ssh',
-                                'data': ['c76999a2-05e7-4dcb-aef3-5da30b6c502c:/mnt/home',
-                                         '20552761-b5f3-4027-9811-d0f2f50a3e60:/mnt/results',
-                                         '9b4589c8-1b4d-4761-835b-474469b77153:/mnt/datasets'],
-                                'preemptable':True,
-                                'resources': {
-                                    'cpu': 4,
-                                    'mem': 8,
-                                    'gpu': 1
-                                },
-                                'interactive': False,
-                                },
-                    )
-
-        command = ("python trainval.py -ei <exp_id> -sb {savedir_base} -d {datadir_base} "
-                       "--ngpu {ngpu} "
-                       "{cuda_deterministic} "
-                       "{pin_memory} "
-                       "--num_workers {num_workers}".format(savedir_base=args.savedir_base,
-                                                            ngpu=args.ngpu,
-                                                            cuda_deterministic="--cuda_deterministic " if args.cuda_deterministic else "",
-                                                            pin_memory="--pin_memory" if args.pin_memory else "",
-                                                            num_workers=args.num_workers,
-                                                            datadir_base=args.datadir_base))
-        print(command)
-        jm.launch_menu(command=command)
-        
-
-    else:
+    if not args.run_jobs:
         # run experiments
         for exp_dict in exp_list:
             # do trainval
@@ -290,3 +251,33 @@ if __name__ == '__main__':
                      ngpu=args.ngpu,
                      cuda_deterministic=args.cuda_deterministic,
                      )
+    else:
+        # launch jobs
+        from haven import haven_jobs as hjb
+        import job_configs as jc
+        
+        jm = hjb.JobManager(exp_list=exp_list, 
+                    savedir_base=args.savedir_base, 
+                    account_id=jc.ACCOUNT_ID,
+                    workdir=os.path.dirname(os.path.realpath(__file__)),
+                    job_config=jc.JOB_CONFIG,
+                    )
+
+        command = ("python trainval.py "
+                       "-ei <exp_id> "
+                       "-sb {savedir_base} "
+                       "-d {datadir_base} "
+                       "-ng {ngpu} "
+                       "-cd {cuda_deterministic} "
+                       "-pm {pin_memory} "
+                       "-nw {num_workers}".format(savedir_base=args.savedir_base,
+                                                            ngpu=args.ngpu,
+                                                            cuda_deterministic=args.cuda_deterministic,
+                                                            pin_memory=args.pin_memory,
+                                                            num_workers=args.num_workers,
+                                                            datadir_base=args.datadir_base))
+        print(command)
+        jm.launch_menu(command=command)
+        
+
+    
