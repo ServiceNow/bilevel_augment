@@ -16,11 +16,11 @@ The goal is to automatically learn an efficient data augmentation regime for ima
 
 ## Overview
 
-<b>What's new:</b> This method provides a way to learn automatically the best data augmentation jointly with an image classifier. It does not require a manual preselection of potentially useful transformations, which makes the method faster than those requiring an expensive validation loop for data augmentation selection and applicable to any datasets, especially those where predefining good data augmentation transformation is not trivial, like in medical imaging.
+<b>What's new:</b> This method provides a way to automatically learn data augmentation in order to improve the image classification performance. It does not require us to hard code augmentation techniques, which might need domain knowledge or an expensive hyper-parameter search on the validation set.
 
-<b>Key insight:</b> Our method uses the gradient of the validation loss in a bilevel optimization framework to learn the best data augmentation parameters. To address the issue of the computational cost to resolve the bilevel optimization, we estimate the validation loss using truncated back-propagation.
+<b>Key insight:</b> Our method efficiently trains a network that performs data augmentation. This network learns data augmentation by usiing the gradient that flows from computing the classifier's validation loss using an online version of bilevel optimization. We also perform truncated back-propagation in order to significantly reduce the computational cost of bilevel optimization.
 
-<b>How it works:</b>
+<b>How it works:</b> Our method jointly trains a classifier and an augmentation network through the following steps,
 
 
 ![figure](docs/model_new.png)
@@ -28,9 +28,9 @@ The goal is to automatically learn an efficient data augmentation regime for ima
 * For each mini batch,a forward pass is made to calculate the training loss.
 * Based on the training loss and the gradient of the training loss, an optimization step is made for the classifier in the inner loop.
 * A forward pass is then made on the classifier with the new weight to calculate the validation loss.
-* Thanks to the shared weights of the classifier used to obtain the training and validation loss, the gradient of the validation loss is backpropagated to the augmenter network to train it.
+* The gradient from the validation loss is backpropagated to train the augmentation network.
 
-<b>Results:</b> Our model obtains better results than carefuly hand defined transformations and GAN-based approach and close results to methods using a policy search on CIFAR10, CIFAR100, BACH, Tiny-Imagenet and Imagenet datasets.
+<b>Results:</b> Our model obtains better results than carefuly hand engineered transformations and GAN-based approaches. Further, the results are competitive against methods that use a policy search on CIFAR10, CIFAR100, BACH, Tiny-Imagenet and Imagenet datasets.
 
 <b>Why it matters:</b> Proper data augmentation can significantly improve generalization performance. Unfortunately, deriving these augmentations require domain expertise or extensive hyper-parameter search. Thus, having an automatic and quick way of identifying efficient data augmentation has a big impact in obtaining better models.
 
@@ -63,7 +63,11 @@ python trainval.py -e bach -sb ../results -d ../data -r 1
 where `-e` defines the experiment group, `-sb` is the result directory, and `-d` is the dataset directory.
 
 
-<b>3. Results:</b> Launch Jupyter by running the following on terminal,
+<b>3. Results:</b> Display the results by following the steps below,
+
+![figure](docs/results.png)
+
+Launch Jupyter by running the following on terminal,
 
 ```
 jupyter nbextension enable --py widgetsnbextension
@@ -77,16 +81,28 @@ from haven import haven_results as hr
 from haven import haven_utils as hu
 
 # path to where the experiments got saved
-savedir_base = '<path_to_savedir_base>'
+savedir_base = '<savedir_base>'
+exp_list = None
 
+# exp_list = hu.load_py(<exp_config_name>).EXP_GROUPS[<exp_group>]
 # get experiments
-rm = hr.ResultManager(exp_list=None, 
+rm = hr.ResultManager(exp_list=exp_list, 
                       savedir_base=savedir_base, 
                       verbose=0
                      )
+y_metrics = ['test_acc']
+bar_agg = 'max'
+mode = 'bar'
+legend_list = ['model.netA.name']
+title_list = 'dataset.name'
+legend_format = 'Augmentation Netwok: {}'
+filterby_list = {'dataset':{'name':'cifar10'}, 'model':{'netC':{'name':'resnet18_meta_2'}}}
+
 # launch dashboard
 hj.get_dashboard(rm, vars(), wide_display=True)
 ```
+
+
 
 ## Citation
 
