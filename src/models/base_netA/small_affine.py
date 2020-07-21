@@ -78,15 +78,6 @@ class smallAffine(nn.Module):
         # Restandardize image
         x = x / self.std.view(1, 3, 1, 1)
 
-        # if self.buffer_in.size()[0] == 0:
-        #     self.buffer_in = noise.clone().detach()
-        # else:
-        #     self.buffer_in = torch.cat((self.buffer_in, noise.clone().detach()))
-        # if self.buffer_out.size()[0] == 0:
-        #     self.buffer_out = affinematrix.clone().detach().view(-1, 6)
-        # else:
-        #     self.buffer_out = torch.cat((self.buffer_out, affinematrix.clone().detach().view(-1, 6)))
-
         transformations = torch.mean(affinematrix.clone().detach().view(-1, 6), dim=0, keepdim=True)
 
         return x, transformations

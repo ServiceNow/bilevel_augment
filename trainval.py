@@ -146,11 +146,8 @@ def trainval(exp_dict, savedir_base, datadir_base, reset=False, num_workers=0, p
         test_dict = model.test_on_loader(testloader)
 
         # Vis phase
-        # model.vis_on_loader(epoch, visloader, savedir_images=os.path.join(savedir, 'images'))
         model.vis_on_loader('train', trainset, savedir_images=os.path.join(
             savedir, 'images'), epoch=epoch)
-        # model.vis_on_loader('validation', valset, savedir_images=os.path.join(savedir, 'images'), epoch=epoch)
-        # model.vis_on_loader('test', testset, savedir_images=os.path.join(savedir, 'images'), epoch=epoch)
 
         score_dict = {}
         score_dict["epoch"] = epoch

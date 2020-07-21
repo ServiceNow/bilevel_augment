@@ -43,18 +43,8 @@ def get_train_val_dataloader(exp_dict,
                              pin_memory=False, 
                              num_workers=0):
     indices = np.arange(len(trainset))
-    # labels=[img[1] for img in trainset.imgs]
+
     labels = trainset.get_labels()
-
-    # n_total = len(trainset)
-    # n_train = int((1 - exp_dict['valratio']) * n_total)
-    # n_val = n_total - n_train
-
-    # if mixtrainval:
-    #     ind_train, ind_val = get_train_val_ind(indices, labels, exp_dict['valratio'], mixtrainval, exp_dict['fixedSeed'])
-    # else:
-    #     with hu.random_seed(exp_dict['fixedSeed']):
-    #         ind_train, ind_val = get_train_val_ind(indices, n_train, n_val)
 
     ind_train, ind_val = get_train_val_ind(indices, labels, exp_dict['valratio'], mixtrainval, exp_dict['fixedSeed'])
 
@@ -74,9 +64,6 @@ def get_train_val_dataloader(exp_dict,
 
 
 def get_train_val_ind(indices, labels, valratio, shuffle, seed):
-    # ind_train = np.random.choice(indices, n_train, replace=False) 
-    # ind_remaining = np.setdiff1d(indices, ind_train)
-    # ind_val = np.random.choice(ind_remaining, n_val, replace=False) 
 
     ind_train, ind_val, _, _ = train_test_split(indices, labels, test_size=valratio, random_state= seed, shuffle=shuffle)
 
