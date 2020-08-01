@@ -15,15 +15,15 @@ class CIFAR:
             train = True
         elif split =='test':
             train = False
-
+        self.split = split
         if self.name == 'cifar10':
             path = datadir_base or "/mnt/datasets/public/cifar10"
             self.n_classes = 10
-            self.dataset = dset.CIFAR10(root=path, train=train, download=True)
+            self.dataset = dset.CIFAR10(root=path, train=train, download=False)
         else:
             path = datadir_base or "/mnt/datasets/public/cifar100"
             self.n_classes = 100
-            self.dataset = dset.CIFAR100(root=path, train=train, download=True)
+            self.dataset = dset.CIFAR100(root=path, train=train, download=False)
         self.dataset.targets = np.array(self.dataset.targets)
         normalize = transforms.Normalize(mean = [x / 255.0 for x in [125.3, 123.0, 113.9]],
                                          std = [x / 255.0 for x in [63.0, 62.1, 66.7]])

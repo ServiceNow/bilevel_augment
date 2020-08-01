@@ -33,7 +33,8 @@ from src.utils import get_slope
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
-def trainval(exp_dict, savedir_base, datadir_base, reset=False, num_workers=0, pin_memory=False, ngpu=1, cuda_deterministic=False):
+def trainval(exp_dict, savedir_base, datadir_base, reset=False, 
+            num_workers=0, pin_memory=False, ngpu=1, cuda_deterministic=False):
     # bookkeeping
     # ==================
 

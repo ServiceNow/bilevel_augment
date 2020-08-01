@@ -60,7 +60,7 @@ class Blvl(nn.Module):
         transformations_mean = 0.
         transformations_std = 0.
         transforms = None
-        with tqdm.tqdm(total=len(loader)) as pbar:
+        with tqdm.tqdm(total=len(loader), leave=False) as pbar:
             for batch in loader:
                 
                 if self.model_dict.get('netA') is not None:
@@ -136,7 +136,7 @@ class Blvl(nn.Module):
         self.eval()
 
         clf_monitor = ClfMonitor()
-        with tqdm.tqdm(total=len(loader)) as pbar:
+        with tqdm.tqdm(total=len(loader), leave=False) as pbar:
             for batch in loader:
                 images, labels = batch['images'].to(self.device), batch['labels'].to(self.device)
                 # Calculate scores
