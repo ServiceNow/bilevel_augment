@@ -5,7 +5,6 @@ def get_optimizer(optimparams, model):
     # classifier model optimizer
     if optimparams['optim'] == 'adam':
         optimizer = optim.Adam(model.parameters(), lr=optimparams['lr'], 
-            #  betas=(optimparams['beta_1'], 0.999), 
              weight_decay=optimparams['weight_decay'])
     
     elif optimparams['optim'] == 'adamW':

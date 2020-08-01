@@ -13,8 +13,6 @@ import warnings
 from functools import partial
 import csv
 
-# from .utils.utils import check_files, load_data, get_files, decode_classes
-
 def csv_reader(fname):
     with open(fname, 'r') as f:
         out = list(csv.reader(f))
