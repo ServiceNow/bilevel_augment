@@ -6,7 +6,7 @@
 # DABO: Data Augmentation with Bilevel Optimization  [[Paper]](https://arxiv.org/pdf/2006.14699.pdf)
 The goal is to automatically learn an efficient data augmentation regime for image classification.
 
-
+Accepted at WACV2021
 
 ## Table of Contents
 
