@@ -1,2 +1,2 @@
-git+git://github.com/IssamLaradji/haven.git@master#egg=haven
+git+git://github.com/haven-ai/haven.git@master#egg=haven
 torchmeta>0.0
