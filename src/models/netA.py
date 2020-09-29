@@ -9,11 +9,10 @@ import os
 import numpy as np
 
 import torch.optim as optim
-from .base_netA import stn, small_affine 
+from .base_netA import stn, small_affine, affine_color 
 
 from torch.nn import functional as F
 from collections import OrderedDict
-from .base_netA.det_utils import get_slope
 from  src import utils as ut
 
 from torchmeta.modules import DataParallel
@@ -35,6 +34,11 @@ class Augmenter(nn.Module):
         elif model_dict['name'] == 'small_affine':
             self.net = small_affine.smallAffine(nz=6, 
                                             transformation=model_dict['transform'], 
+                                            datasetmean=dataset.mean, 
+                                            datasetstd=dataset.std)
+
+        elif model_dict['name'] == 'affine_color':
+            self.net = affine_color.affineColor(nz=10, 
                                             datasetmean=dataset.mean, 
                                             datasetstd=dataset.std)
 
@@ -87,14 +91,7 @@ class Augmenter(nn.Module):
             images = images.repeat(factor, 1, 1, 1)
 
         with torch.autograd.set_detect_anomaly(True):
-            if self.name in ['mask_cnn', 'mask_fc', 'color_mask']:
-                augimages, _, transformations = self.net(images)
-
-            elif self.name in ['affine_color_mask_det']:
-                augimages, transformations = self.net(images, get_slope(self.slope_annealing, self.epoch))
-
-            else:
-                augimages, transformations = self.net(images)
+            augimages, transformations = self.net(images)
 
         return augimages, labels, transformations
 
@@ -192,15 +189,6 @@ class Augmenter(nn.Module):
             gc.collect()
 
             return float(loss_clf.item()), transformations
-
-
-    def cycle(self, iterable):
-        iterator = iter(iterable)
-        while True:
-            try:
-                yield next(iterator)
-            except StopIteration:
-                iterator = iter(iterable)
 
     def __call__(self, img):
         img = img.unsqueeze(0)

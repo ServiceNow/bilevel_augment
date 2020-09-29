@@ -3,7 +3,6 @@ from .optimizers import get_optimizer
 import torch 
 from src import models
 from torch.nn import functional as F
-from src.utils import get_slope
 import itertools 
 import tqdm
 from haven import haven_utils as hu

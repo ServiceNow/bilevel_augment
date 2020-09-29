@@ -1,2 +1,2 @@
 git+git://github.com/haven-ai/haven.git@master#egg=haven
-torchmeta>0.0
+torchmeta==1.4.5
