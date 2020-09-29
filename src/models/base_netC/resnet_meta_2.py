@@ -110,11 +110,11 @@ def ResNet34(nc, nclasses):
 def ResNet50(nc, nclasses):
     return ResNet(nc, nclasses, Bottleneck, [3, 4, 6, 3])
 
-def ResNet101(nc, num_classes):
-    return ResNet(nc, Bottleneck, [3, 4, 23, 3])
+def ResNet101(nc, n_classes):
+    return ResNet(nc, nclasses, Bottleneck, [3, 4, 23, 3])
 
-def ResNet152(nc, num_classes):
-    return ResNet(nc, Bottleneck, [3, 8, 36, 3])
+def ResNet152(nc, n_classes):
+    return ResNet(nc, nclasses, Bottleneck, [3, 8, 36, 3])
 
 
 def test():

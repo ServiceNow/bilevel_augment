@@ -7,7 +7,7 @@ from torch.utils.data import sampler
 
 import torchvision.transforms as transforms
 import numpy as np
-from . import cifar, bach
+from . import cifar, imagenet, tinyimagenet, bach
 from haven import haven_utils as hu
 from src.datasets.utils.patch_extractors import *
 
@@ -21,6 +21,23 @@ def get_dataset(datasetparams, split, exp_dict, datadir_base=None,
                         n_samples=n_samples,
                         colorjitter=colorjitter,
                         val_transform=val_transform)
+    elif datasetparams['name'] == 'cifar100':
+        return cifar.CIFAR(split=split, transform_lvl=transform_lvl, 
+                        datadir_base=datadir_base, name=datasetparams['name'],
+                        n_samples=n_samples,
+                        colorjitter=colorjitter,
+                        val_transform=val_transform)
+    elif datasetparams['name'] == 'imagenet':
+        return imagenet.ImageNet(split=split, transform_lvl=transform_lvl, 
+                                datadir_base=datadir_base,
+                                n_samples=n_samples,
+                                val_transform=val_transform)
+        return dataset
+    elif datasetparams['name'] == 'tinyimagenet':
+        return tinyimagenet.TinyImageNet(split=split, transform_lvl=transform_lvl, 
+                                datadir_base=datadir_base,
+                                n_samples=n_samples,
+                                val_transform=val_transform)                                                        
     elif datasetparams['name'] == 'bach':
         return bach.Bach(split=split, transform_lvl=transform_lvl, 
                                 datadir_base=datadir_base,

@@ -28,8 +28,6 @@ from src.datasets import get_dataset, get_train_val_dataloader
 
 import pprint
 
-from src.utils import get_slope
-
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
