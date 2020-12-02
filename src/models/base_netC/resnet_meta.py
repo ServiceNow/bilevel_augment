@@ -4,7 +4,6 @@ from .utils import load_state_dict_from_url
 
 from torchmeta.modules import (MetaModule, MetaSequential, MetaConv2d,
                                MetaBatchNorm2d, MetaLinear)
-from torchmeta.modules.utils import get_subdict
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
@@ -59,15 +58,15 @@ class BasicBlock(MetaModule):
     def forward(self, x, params=None):
         identity = x
 
-        out = self.conv1(x, params=get_subdict(params, 'conv1'))
-        out = self.bn1(out, params=get_subdict(params, 'bn1'))
+        out = self.conv1(x, params=self.get_subdict(params, 'conv1'))
+        out = self.bn1(out, params=self.get_subdict(params, 'bn1'))
         out = self.relu(out)
 
-        out = self.conv2(out, params=get_subdict(params, 'conv2'))
-        out = self.bn2(out, params=get_subdict(params, 'bn2'))
+        out = self.conv2(out, params=self.get_subdict(params, 'conv2'))
+        out = self.bn2(out, params=self.get_subdict(params, 'bn2'))
 
         if self.downsample is not None:
-            identity = self.downsample(x, params=get_subdict(params, 'downsample'))
+            identity = self.downsample(x, params=self.get_subdict(params, 'downsample'))
 
         out += identity
         out = self.relu(out)
@@ -104,19 +103,19 @@ class Bottleneck(MetaModule):
     def forward(self, x, params=None):
         identity = x
 
-        out = self.conv1(x, params=get_subdict(params, 'conv1'))
-        out = self.bn1(out, params=get_subdict(params, 'bn1'))
+        out = self.conv1(x, params=self.get_subdict(params, 'conv1'))
+        out = self.bn1(out, params=self.get_subdict(params, 'bn1'))
         out = self.relu(out)
 
-        out = self.conv2(out, params=get_subdict(params, 'conv2'))
-        out = self.bn2(out, params=get_subdict(params, 'bn2'))
+        out = self.conv2(out, params=self.get_subdict(params, 'conv2'))
+        out = self.bn2(out, params=self.get_subdict(params, 'bn2'))
         out = self.relu(out)
 
-        out = self.conv3(out, params=get_subdict(params, 'conv3'))
-        out = self.bn3(out, params=get_subdict(params, 'bn3'))
+        out = self.conv3(out, params=self.get_subdict(params, 'conv3'))
+        out = self.bn3(out, params=self.get_subdict(params, 'bn3'))
 
         if self.downsample is not None:
-            identity = self.downsample(x, params=get_subdict(params, 'downsample'))
+            identity = self.downsample(x, params=self.get_subdict(params, 'downsample'))
 
         out += identity
         out = self.relu(out)
@@ -205,19 +204,19 @@ class ResNet(MetaModule):
 
     def _forward_impl(self, x, params=None):
         # See note [TorchScript super()]
-        x = self.conv1(x, params=get_subdict(params, 'conv1'))
-        x = self.bn1(x, params=get_subdict(params, 'bn1'))
+        x = self.conv1(x, params=self.get_subdict(params, 'conv1'))
+        x = self.bn1(x, params=self.get_subdict(params, 'bn1'))
         x = self.relu(x)
         x = self.maxpool(x)
 
-        x = self.layer1(x, params=get_subdict(params, 'layer1'))
-        x = self.layer2(x, params=get_subdict(params, 'layer2'))
-        x = self.layer3(x, params=get_subdict(params, 'layer3'))
-        x = self.layer4(x, params=get_subdict(params, 'layer4'))
+        x = self.layer1(x, params=self.get_subdict(params, 'layer1'))
+        x = self.layer2(x, params=self.get_subdict(params, 'layer2'))
+        x = self.layer3(x, params=self.get_subdict(params, 'layer3'))
+        x = self.layer4(x, params=self.get_subdict(params, 'layer4'))
 
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
-        x = self.fc(x, params=get_subdict(params, 'fc'))
+        x = self.fc(x, params=self.get_subdict(params, 'fc'))
 
         return x
 

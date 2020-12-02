@@ -14,7 +14,7 @@ import torch.nn.functional as F
 
 from torchmeta.modules import (MetaModule, MetaSequential, MetaConv2d,
                                MetaBatchNorm2d, MetaLinear)
-from torchmeta.modules.utils import get_subdict
+from torchmeta.modules.utils import self.get_subdict
 
 class BasicBlock(MetaModule):
     expansion = 1
@@ -34,9 +34,9 @@ class BasicBlock(MetaModule):
             )
 
     def forward(self, x, params=None):
-        out = F.relu(self.bn1(self.conv1(x, params=get_subdict(params, 'conv1')), params=get_subdict(params, 'bn1')))
-        out = self.bn2(self.conv2(out, params=get_subdict(params, 'conv2')), params=get_subdict(params, 'bn2'))
-        out += self.shortcut(x, params=get_subdict(params, 'shortcut'))
+        out = F.relu(self.bn1(self.conv1(x, params=self.get_subdict(params, 'conv1')), params=self.get_subdict(params, 'bn1')))
+        out = self.bn2(self.conv2(out, params=self.get_subdict(params, 'conv2')), params=self.get_subdict(params, 'bn2'))
+        out += self.shortcut(x, params=self.get_subdict(params, 'shortcut'))
         out = F.relu(out)
         return out
 
@@ -61,10 +61,10 @@ class Bottleneck(MetaModule):
             )
 
     def forward(self, x, params=None):
-        out = F.relu(self.bn1(self.conv1(x, params=get_subdict(params, 'conv1')), params=get_subdict(params, 'bn1')))
-        out = F.relu(self.bn2(self.conv2(out, params=get_subdict(params, 'conv2')), params=get_subdict(params, 'bn2')))
-        out = self.bn3(self.conv3(out, params=get_subdict(params, 'conv3')), params=get_subdict(params, 'bn3'))
-        out += self.shortcut(x, params=get_subdict(params, 'shortcut'))
+        out = F.relu(self.bn1(self.conv1(x, params=self.get_subdict(params, 'conv1')), params=self.get_subdict(params, 'bn1')))
+        out = F.relu(self.bn2(self.conv2(out, params=self.get_subdict(params, 'conv2')), params=self.get_subdict(params, 'bn2')))
+        out = self.bn3(self.conv3(out, params=self.get_subdict(params, 'conv3')), params=self.get_subdict(params, 'bn3'))
+        out += self.shortcut(x, params=self.get_subdict(params, 'shortcut'))
         out = F.relu(out)
         return out
 
@@ -90,14 +90,14 @@ class ResNet(MetaModule):
         return MetaSequential(*layers)
 
     def forward(self, x, params=None):
-        out = F.relu(self.bn1(self.conv1(x, params=get_subdict(params, 'conv1')), params=get_subdict(params, 'bn1')))
-        out = self.layer1(out, params=get_subdict(params, 'layer1'))
-        out = self.layer2(out, params=get_subdict(params, 'layer2'))
-        out = self.layer3(out, params=get_subdict(params, 'layer3'))
-        out = self.layer4(out, params=get_subdict(params, 'layer4'))
+        out = F.relu(self.bn1(self.conv1(x, params=self.get_subdict(params, 'conv1')), params=self.get_subdict(params, 'bn1')))
+        out = self.layer1(out, params=self.get_subdict(params, 'layer1'))
+        out = self.layer2(out, params=self.get_subdict(params, 'layer2'))
+        out = self.layer3(out, params=self.get_subdict(params, 'layer3'))
+        out = self.layer4(out, params=self.get_subdict(params, 'layer4'))
         out = F.avg_pool2d(out, out.size()[2:])
         out = out.view(out.size(0), -1)
-        out = self.linear(out, params=get_subdict(params, 'linear'))
+        out = self.linear(out, params=self.get_subdict(params, 'linear'))
         return out
 
 
